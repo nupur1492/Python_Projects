@@ -72,27 +72,18 @@ pred = lm.predict(test)
 # Specific features/input columns for training
 feature_columns = ['Hour', 'maxpressurei', 'maxdewpti', 'maxtempi', 'meanwindspdi', 'rain', 'fog', 'precipi', 'thunder', 'dayofweek' ]
 
-features_train = pd.DataFrame(train, columns=feature_columns)
-#output column
-labels_train = train['ENTRIESn_hourly']
+features = df_subway[feature_columns]
+y = df_subway.ENTRIESn_hourly
 
-# divide test into input and output
-features_test = pd.DataFrame(test, columns=feature_columns)
-labels_test = np.array(test['ENTRIESn_hourly'])
-#labels_test = test['ENTRIESn_hourly']
+from sklearn import linear_model
 
-print(len(features_train), len(labels_train), len(features_test), len(labels_test))
+reg = linear_model.LinearRegression()
+reg.fit(features, y)
 
-# Decision Trees
-from sklearn import tree
+print(reg.intercept_)
+print(reg.coef_)
 
-reg_dt = tree.DecisionTreeRegressor(max_depth=5)
+#calculate r squared
+reg.score(features, y)
 
-reg_dt.fit(features_train, labels_train)
 
-pred_dt = reg_dt.predict(features_test)
-
-#print(type(pred_dt), pred_dt)
-#print(type(labels_test), labels_test)
-
-#print('Decision Tree Regression Score: ', reg_dt.score(labels_test, pred_dt))
